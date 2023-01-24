@@ -9,6 +9,10 @@ class MailService {
     }
     return { name: user.name, messages: user.messages };
   }
+  async getAllUsers() {
+    let userNames = await UserModel.find({}, { name: 1, _id: 0});
+    return userNames;
+  }
   async sendMessage(recipient: string, message: IMessage) {
     let user = await UserModel.findOne({ name: recipient });
     if (!user) {

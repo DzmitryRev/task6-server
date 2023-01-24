@@ -1,7 +1,8 @@
-import { NextFunction } from "express";
+import { NextFunction, Request } from "express";
 import MailService from "../services/MailService";
 import events from "events";
 import {
+    IGetAllUserNamesRes,
   IGetUserMessagesReq,
   IGetUserMessagesRes,
   ISendMessagesReq,
@@ -15,6 +16,14 @@ class UserController {
       const { userName } = req.params;
       const user = await MailService.getUserMessages(userName);
       return res.json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getAllUserNames(req: Request, res: IGetAllUserNamesRes, next: NextFunction) {
+    try {
+      const user = await MailService.getAllUsers();
+      return user.map((item) => item.name);
     } catch (e) {
       next(e);
     }

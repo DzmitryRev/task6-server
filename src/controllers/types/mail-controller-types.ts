@@ -20,3 +20,4 @@ export type ISendMessagesReq = Request<{}, {}, { recipient: string; message: IMe
 export type ISendMessagesRes = Response<{
   message: IMessage;
 }>;
+export type IGetAllUserNamesRes = Response<string[]>;
