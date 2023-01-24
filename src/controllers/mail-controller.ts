@@ -1,21 +1,32 @@
 import { NextFunction } from "express";
 import MailService from "../services/MailService";
-import { IGetUserMessagesReq, IGetUserMessagesRes, ISendMessagesReq, ISendMessagesRes } from "./types/mail-controller-types";
+import events from "events";
+import {
+  IGetUserMessagesReq,
+  IGetUserMessagesRes,
+  ISendMessagesReq,
+  ISendMessagesRes,
+} from "./types/mail-controller-types";
 
+const emitter = new events.EventEmitter();
 class UserController {
-  async getUsers(req: IGetUserMessagesReq, res: IGetUserMessagesRes, next: NextFunction) {
+  async getUserMessages(req: IGetUserMessagesReq, res: IGetUserMessagesRes, next: NextFunction) {
     try {
-      const { name } = req.body;
-      const users = await MailService.getUserMessages(name);
-      return res.json(users);
+      const { userName } = req.params;
+      const user = await MailService.getUserMessages(userName);
+      return res.json(user);
     } catch (e) {
       next(e);
     }
   }
+
   async sendMessage(req: ISendMessagesReq, res: ISendMessagesRes, next: NextFunction) {
     try {
-      const { name, message } = req.body;
-      const messageRes = await MailService.sendMessage(name, message);
+      const { recipient, message } = req.body;
+      if (!message.author || !message.body || !message.subject || !recipient) {
+        throw new Error("Error");
+      }
+      const messageRes = await MailService.sendMessage(recipient, message);
       return res.json(messageRes);
     } catch (e) {
       next(e);

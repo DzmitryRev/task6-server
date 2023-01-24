@@ -1,43 +1,36 @@
 import express, { Express } from "express";
-// import mongoose from "mongoose";
-// import cors from "cors";
+import mongoose from "mongoose";
+import cors from "cors";
 import dotenv from "dotenv";
-// import router from "./router";
-// import errorMiddleware from "./middlewares/error-mw";
+import router from "./routes";
 
 dotenv.config();
-// mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", false);
 
-const app: Express = express();
+const app = express();
 
-const PORT = 3003;
+const PORT = 3006;
 
 app.use(express.json());
 
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: process.env.CLIENT_URL,
-//   })
-// );
-// app.use("/api", router);
-// app.use(errorMiddleware);
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+  })
+);
+app.use("/api", router);
 
-// const start = async () => {
-//   try {
-//     await mongoose.connect(process.env.MONGO_DB_URL).catch((error: Error) => {
-//       throw new Error(error.message);
-//     });
-//     app.listen(PORT, () => {
-//       console.log(`Server is running. PORT=${PORT}`);
-//     });
-//   } catch (error) {
-//     console.log(error, "a");
-//   }
-// };
+const start = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_DB_URL).catch((error: Error) => {
+      throw new Error(error.message);
+    });
+    app.listen(PORT, () => {
+      console.log(`Server is running. PORT=${PORT}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// start();
-
-app.listen(PORT, () => {
-  console.log(`Server is running. PORT=${PORT}`);
-});
+start();
