@@ -8,7 +8,7 @@ const emitter = new events.EventEmitter();
 const router = Router();
 
 router.get("/messages/:userName", mailController.getUserMessages);
-router.get("/user-names", mailController.getAllUserNames);
+router.get("/names", mailController.getAllUserNames);
 router.post(
   "/message",
   body("name").not().isEmpty(),

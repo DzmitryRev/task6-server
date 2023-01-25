@@ -10,7 +10,7 @@ class MailService {
     return { name: user.name, messages: user.messages };
   }
   async getAllUsers() {
-    let userNames = await UserModel.find({}, { name: 1, _id: 0});
+    let userNames = await UserModel.find({}, { name: 1, _id: 0 });
     return userNames;
   }
   async sendMessage(recipient: string, message: IMessage) {
@@ -18,7 +18,17 @@ class MailService {
     if (!user) {
       user = await UserModel.create({ name: recipient, messages: [] });
     }
-    await UserModel.updateOne({ name: recipient }, { $push: { messages: message } });
+    await UserModel.updateOne(
+      { name: recipient },
+      {
+        $push: {
+          messages: {
+            $each: [message],
+            $position: 0,
+          },
+        },
+      }
+    );
     return { message };
   }
 }

@@ -2,7 +2,7 @@ import { NextFunction, Request } from "express";
 import MailService from "../services/MailService";
 import events from "events";
 import {
-    IGetAllUserNamesRes,
+  IGetAllUserNamesRes,
   IGetUserMessagesReq,
   IGetUserMessagesRes,
   ISendMessagesReq,
@@ -22,8 +22,8 @@ class UserController {
   }
   async getAllUserNames(req: Request, res: IGetAllUserNamesRes, next: NextFunction) {
     try {
-      const user = await MailService.getAllUsers();
-      return user.map((item) => item.name);
+      const names = await MailService.getAllUsers();
+      return res.json(names.map((item) => item.name));
     } catch (e) {
       next(e);
     }
